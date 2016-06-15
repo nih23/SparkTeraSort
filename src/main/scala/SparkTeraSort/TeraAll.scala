@@ -17,7 +17,6 @@ object TeraAll {
     val parts: Int = args(1).toInt
     val filesPath = args(2)
 
-
     val outputSizeInBytes = TeraGen.sizeStrToBytes(dataSizeStr)
     val size = TeraGen.sizeToSizeStr(outputSizeInBytes)
 
@@ -25,7 +24,7 @@ object TeraAll {
     // INITIALIZE
     // **************************************************
     val conf = new SparkConf()
-      .setAppName(s"TeraSort ($size)")
+	.setAppName(s"TeraSort ($size)")
       //.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
     val sc = new SparkContext(conf)
     val recordsPerPartition = outputSizeInBytes / 100 / parts.toLong
@@ -94,17 +93,17 @@ object TeraAll {
 
       override def compare(x: Array[Byte], y: Array[Byte]): Int = UnsignedBytes.lexicographicalComparator.compare(x,y)
     }, classTag[Array[Byte]])
-
+    sorted.count()
     t1 = System.nanoTime()
 
     // **************************************************
     // VALIDATE DATASET
     // **************************************************
-    TeraValidate.validate(sc, sorted)
 
 
     println("sorting " + dataSizeStr + " => " + (t1 - t2)/Math.pow(10,9) + "s")
 
+    TeraValidate.validate(sc, sorted)
 
   }
 

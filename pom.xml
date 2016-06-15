@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>TUD</groupId>
     <artifactId>SparkTeraSort</artifactId>
-    <version>0.2-alpha</version>
+    <version>0.3</version>
     <inceptionYear>2016</inceptionYear>
     <properties>
         <scala.version>2.10.4</scala.version>
@@ -97,7 +97,7 @@
                     </descriptorRefs>
                     <archive>
                         <manifest>
-                            <mainClass>SparkTeraSort.TeraGen</mainClass>
+                            <mainClass>SparkTeraSort.TeraAll</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
@@ -118,7 +118,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>SparkTeraSort.TeraGen</mainClass>
+                            <mainClass>SparkTeraSort.TeraAll</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
