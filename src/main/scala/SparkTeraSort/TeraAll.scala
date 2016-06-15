@@ -60,19 +60,16 @@ object TeraAll {
         (key.clone(), value)
       }
     }
-    var t2 = System.nanoTime()
 
-    println("no Samples -> " + dataset.count() + " in " + (t2 - t1)/Math.pow(10,9) + "s")
 
     // **************************************************
     // WRITE DATASET
     // **************************************************
 
-    t1 = System.nanoTime()
     dataset.saveAsNewAPIHadoopFile[TeraOutputFormat](filesPath)
-    t2 = System.nanoTime()
+    var t2 = System.nanoTime()
     println("Number of records written: " + dataset.count())
-    println("IO write => " + (t2 - t1)/Math.pow(10,9) + "s")
+    println("t_IOw => " + (t2 - t1)/Math.pow(10,9) + "s")
 
     // **************************************************
     // RE-READ DATASET
@@ -82,7 +79,7 @@ object TeraAll {
     val d2 = sc.newAPIHadoopFile[Array[Byte], Array[Byte], TeraInputFormat](filesPath).cache // dataset_raw
     d2.count()
     t2 = System.nanoTime()
-    println("IO read => " + (t2 - t1)/Math.pow(10,9) + "s")
+    println("t_ioR = " + (t2 - t1)/Math.pow(10,9) + "s")
 
     // **************************************************
     // SORT DATASET
@@ -93,7 +90,7 @@ object TeraAll {
 
       override def compare(x: Array[Byte], y: Array[Byte]): Int = UnsignedBytes.lexicographicalComparator.compare(x,y)
     }, classTag[Array[Byte]])
-    sorted.count()
+    sorted.saveAsNewAPIHadoopFile[TeraOutputFormat](filesPath+"_sorted")    
     t1 = System.nanoTime()
 
     // **************************************************
@@ -101,9 +98,9 @@ object TeraAll {
     // **************************************************
 
 
-    println("sorting " + dataSizeStr + " => " + (t1 - t2)/Math.pow(10,9) + "s")
+    println("t_s(" + dataSizeStr + ") = " + (t1 - t2)/Math.pow(10,9) + "s")
 
-    TeraValidate.validate(sc, sorted)
+    // TeraValidate.validate(sc, sorted)
 
   }
 
