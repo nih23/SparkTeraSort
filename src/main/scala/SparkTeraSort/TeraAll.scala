@@ -69,7 +69,7 @@ object TeraAll {
     dataset.saveAsNewAPIHadoopFile[TeraOutputFormat](filesPath)
     var t2 = System.nanoTime()
     println("Number of records written: " + dataset.count())
-    println("t_IOw => " + (t2 - t1)/Math.pow(10,9) + "s")
+    println("t_ioW(" + dataSizeStr + ") = " + (t2 - t1)/Math.pow(10,9) + "s")
 
     // **************************************************
     // RE-READ DATASET
@@ -79,7 +79,7 @@ object TeraAll {
     val d2 = sc.newAPIHadoopFile[Array[Byte], Array[Byte], TeraInputFormat](filesPath).cache // dataset_raw
     d2.count()
     t2 = System.nanoTime()
-    println("t_ioR = " + (t2 - t1)/Math.pow(10,9) + "s")
+    println("t_ioR(" + dataSizeStr + ") = " + (t2 - t1)/Math.pow(10,9) + "s")
 
     // **************************************************
     // SORT DATASET
