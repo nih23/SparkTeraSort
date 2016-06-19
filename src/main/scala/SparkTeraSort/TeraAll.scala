@@ -27,14 +27,19 @@ object TeraAll {
 	.setAppName(s"TeraSort ($size)")
       //.set("spark.serializer", "org.apache.spark.serializer.KryoSerializer")
     val sc = new SparkContext(conf)
-    val recordsPerPartition = outputSizeInBytes / 100 / parts.toLong
-    //val numRecords  = recordsPerPartition * parts.toLong
+    //val recordsPerPartition = (100 * parts.toLong) / outputSizeInBytes
+    val recordsPerPartition = (outputSizeInBytes / 100) / parts.toLong
+    
+    println("output sizes " + outputSizeInBytes + "b")
+    println("parts " + parts.toLong)
+    println("rec/Part " + recordsPerPartition)
+    val numRecords  = outputSizeInBytes / TeraInputFormat.RECORD_LEN
 
     // **************************************************
     // GENERATE DATASET
     // **************************************************
     var t1 = System.nanoTime()
-    val dataset = sc.parallelize(1 to parts).mapPartitionsWithIndex { case (index, _) =>
+    val dataset = sc.parallelize(1 to parts, parts).mapPartitionsWithIndex { case (index, _) =>
       val one = new Unsigned16(1)
 
       val firstRecordNumber = new Unsigned16(index.toLong * recordsPerPartition.toLong)
